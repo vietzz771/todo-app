@@ -3,16 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { DatePicker, Button } from 'antd';
 import 'antd/dist/antd.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
-		<DatePicker />
-		<Button type="primary" style={{ marginLeft: 8 }}>
-			Primary Button
-		</Button>
 		<App />
 	</React.StrictMode>
 );

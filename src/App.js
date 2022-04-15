@@ -1,10 +1,17 @@
 import './App.scss';
+import LoginModal from './Components/LoginModal';
+import { useState } from 'react';
 
 function App() {
+	const [isModalVisible, setIsModalVisible] = useState(true);
+
+	const handleCancel = () => {
+		setIsModalVisible(false);
+	};
+
 	return (
 		<div className="App">
-			hello
-			<p className="App_a">Hello2222</p>
+			<LoginModal isModalVisible={isModalVisible} handleCancel={handleCancel} />
 		</div>
 	);
 }
