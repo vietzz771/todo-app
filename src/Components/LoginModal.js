@@ -1,15 +1,28 @@
 import React from 'react';
 import { Modal, Form, Input, Button } from 'antd';
+import callApi from '../Utils/callApi';
 
 const LoginModal = (props) => {
 	const { isModalVisible } = props;
 
-	const onFinish = (values) => {
-		console.log('Success:', values);
-	};
-	const onFinishFailed = (errorInfo) => {
+	const handleLoginFailed = (errorInfo) => {
 		console.log('Failed:', errorInfo);
+		// todo somthing
 	};
+
+	const handleLogin = async (value) => {
+		try {
+			const resp = await callApi({
+				url: `/user/login`,
+				method: "POST",
+				data: value
+			});
+
+			console.log(resp);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
 	return (
 		<Modal title="Login modal" visible={isModalVisible} footer={null}>
@@ -18,14 +31,14 @@ const LoginModal = (props) => {
 				labelCol={{ span: 6 }}
 				wrapperCol={{ span: 14 }}
 				initialValues={{ remember: true }}
-				onFinish={onFinish}
-				onFinishFailed={onFinishFailed}
+				onFinish={handleLogin}
+				onFinishFailed={handleLoginFailed}
 				autoComplete="off"
 			>
 				<Form.Item
-					label="Username"
-					name="username"
-					rules={[{ required: true, message: 'Please input your username!' }]}
+					label="Email"
+					name="email"
+					rules={[{ required: true, message: 'Please input your email!' }]}
 				>
 					<Input />
 				</Form.Item>
