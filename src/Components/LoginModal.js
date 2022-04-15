@@ -1,9 +1,11 @@
-import React from 'react';
-import { Modal, Form, Input, Button } from 'antd';
+import React, { useState } from 'react';
+import { Modal, Form, Input, Button, Alert } from 'antd';
 import callApi from '../Utils/callApi';
 
 const LoginModal = (props) => {
 	const { isModalVisible } = props;
+	const [message, setMessage] = useState('');
+	const [loading, setLoading] = useState(false);
 
 	const handleLoginFailed = (errorInfo) => {
 		console.log('Failed:', errorInfo);
@@ -12,15 +14,19 @@ const LoginModal = (props) => {
 
 	const handleLogin = async (value) => {
 		try {
+			setMessage('');
+			setLoading(true);
 			const resp = await callApi({
 				url: `/user/login`,
 				method: "POST",
 				data: value
 			});
-
+			setLoading(false);
 			console.log(resp);
 		} catch (error) {
+			setLoading(false);
 			console.log(error);
+			setMessage('Email or password is incorrect');
 		}
 	}
 
@@ -50,8 +56,9 @@ const LoginModal = (props) => {
 				>
 					<Input.Password />
 				</Form.Item>
+				{message && <Alert message={message} type="error" showIcon />}
 				<Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-					<Button type="primary" htmlType="submit">
+					<Button type="primary" htmlType="submit" loading={loading}>
 						Submit
 					</Button>
 				</Form.Item>
