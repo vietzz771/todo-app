@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Form, Input, Button, Alert } from 'antd';
-import callApi from '../Utils/callApi';
-
+import axios from 'axios';
 const LoginModal = (props) => {
-	const { isModalVisible } = props;
+	const { isModalVisible, setIsModalVisible, setIsRegisterModalVisible } =
+		props;
+
+	console.log(props);
 	const [message, setMessage] = useState('');
 	const [loading, setLoading] = useState(false);
 
@@ -16,19 +18,19 @@ const LoginModal = (props) => {
 		try {
 			setMessage('');
 			setLoading(true);
-			const resp = await callApi({
-				url: `/user/login`,
-				method: "POST",
-				data: value
-			});
+			const response = await axios.post(
+				'https://api-nodejs-todolist.herokuapp.com/user/login',
+				value
+			);
+			localStorage.setItem('token', response.data.token);
+			setIsModalVisible(false);
 			setLoading(false);
-			console.log(resp);
 		} catch (error) {
 			setLoading(false);
 			console.log(error);
 			setMessage('Email or password is incorrect');
 		}
-	}
+	};
 
 	return (
 		<Modal title="Login modal" visible={isModalVisible} footer={null}>
@@ -60,6 +62,15 @@ const LoginModal = (props) => {
 				<Form.Item wrapperCol={{ offset: 6, span: 16 }}>
 					<Button type="primary" htmlType="submit" loading={loading}>
 						Submit
+					</Button>
+					<Button
+						type="primary"
+						onClick={() => {
+							setIsRegisterModalVisible(true);
+							setIsModalVisible(false);
+						}}
+					>
+						Register
 					</Button>
 				</Form.Item>
 			</Form>
