@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Input, Button } from 'antd';
 import axios from 'axios';
 
 const TodoApp = (props) => {
 	const { token } = props;
 	const [jobs, setJobs] = useState([]);
-	const [job, setJob] = useState('');
+	const [text, setText] = useState('');
+	const inputRef = useRef();
 
 	const fetchTask = async (value) => {
 		try {
@@ -26,7 +27,7 @@ const TodoApp = (props) => {
 		try {
 			const response = await axios.post(
 				'https://api-nodejs-todolist.herokuapp.com/task',
-				{ description: job },
+				{ description: text },
 				{ headers: { Authorization: 'Bearer ' + token } }
 			);
 			console.log(response);
@@ -37,7 +38,8 @@ const TodoApp = (props) => {
 	};
 	const handleSubmit = () => {
 		handleAddTask();
-		setJob('');
+		setText('');
+		inputRef.current.focus();
 	};
 	const handleRemove = (id) => {
 		setJobs(jobs.filter((item) => item._id !== id));
@@ -45,7 +47,11 @@ const TodoApp = (props) => {
 	console.log(jobs);
 	return (
 		<>
-			<Input onChange={(e) => setJob(e.target.value)} />
+			<Input
+				value={text}
+				onChange={(e) => setText(e.target.value)}
+				ref={inputRef}
+			/>
 			<Button onClick={handleSubmit}>Add</Button>
 			{jobs.map((item) => {
 				return (
