@@ -50,4 +50,8 @@ function App() {
 }
 
 export default App;
-// 7
+
+// 4
+// hello
+// hi
+// how are you
